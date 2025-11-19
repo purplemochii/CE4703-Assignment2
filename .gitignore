@@ -1,0 +1,28 @@
+# Visual Studio files
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build folders
+Debug/
+Release/
+x64/
+x86/
+build/
+ipch/
+
+# Object files
+*.obj
+*.o
+*.pdb
+*.idb
+
+# Cache
+*.opendb
+*.VC.db
+
+# Doxygen output
+docs/html/
+docs/latex/
