@@ -35,3 +35,56 @@ static bool growDeck(CardDeck* deck)
     deck->capacity = new_capacity;
     return true;
 }
+
+/**
+ * @brief Initializes a new deck with the specified number of card packs
+ */
+CardDeck* initDeck(int num_packs)
+{
+    if (num_packs < 0) {
+        return NULL;
+    }
+
+    /// Allocate the deck structure
+    CardDeck* deck = malloc(sizeof(CardDeck));
+    if (!deck) {
+        return NULL;
+    }
+
+    /// Calculate total cards needed
+    int total_cards = num_packs * CARDS_PER_PACK;
+    int capacity = (total_cards > 0) ? total_cards : INITIAL_CAPACITY;
+
+    /// Allocate the cards array
+    deck->cards = malloc(capacity * sizeof(Card));
+    if (!deck->cards) {
+        free(deck);
+        return NULL;
+    }
+
+    deck->size = 0;
+    deck->capacity = capacity;
+
+    /// Fill the deck with complete packs
+    for (int pack = 0; pack < num_packs; pack++) {
+        for (Suit s = CLUB; s <= DIAMOND; s++) {
+            for (Rank r = TWO; r <= ACE; r++) {
+                Card c = { s, r };
+                deck->cards[deck->size++] = c;
+            }
+        }
+    }
+
+    return deck;
+}
+
+/**
+ * @brief Frees all memory associated with a deck
+ */
+void freeDeck(CardDeck* deck)
+{
+    if (deck) {
+        free(deck->cards);
+        free(deck);
+    }
+}
