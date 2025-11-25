@@ -88,3 +88,103 @@ void freeDeck(CardDeck* deck)
         free(deck);
     }
 }
+
+/**
+ * @brief Shuffles the deck randomly
+ */
+void shuffleDeck(CardDeck* deck)
+{
+    if (!deck || deck->size <= 1) {
+        return;
+    }
+
+    for (int i = deck->size - 1; i > 0; i--) {
+        int j = rand() % (i + 1);
+
+        /// Swap cards[i] and cards[j]
+        Card temp = deck->cards[i];
+        deck->cards[i] = deck->cards[j];
+        deck->cards[j] = temp;
+    }
+}
+/**
+ *@brief Adds a card to the top of the deck
+ */
+bool addCard(CardDeck* deck, Card card)
+{
+    if (!deck) {
+        return false;
+    }
+
+    // Grow the deck if needed
+    if (deck->size >= deck->capacity) {
+        if (!growDeck(deck)) {
+            return false;
+        }
+    }
+
+    // Add card to the top (end of array)
+    deck->cards[deck->size++] = card;
+    return true;
+}
+
+/**
+ * @brief Removes and returns the top card from the deck
+ */
+bool removeTopCard(CardDeck* deck, Card* out_card)
+{
+    if (!deck || !out_card || deck->size == 0) {
+        return false;
+    }
+
+    // Remove from the top (end of array)
+    *out_card = deck->cards[--deck->size];
+    return true;
+}
+
+/**
+ * @brief Removes a card at a specific position in the deck
+ */
+bool removeCardAt(CardDeck* deck, int position, Card* out_card)
+{
+    if (!deck || !out_card || position < 0 || position >= deck->size) {
+        return false;
+    }
+
+    // Store the card to return
+    *out_card = deck->cards[position];
+
+    // Shift all cards after position down by one
+    for (int i = position; i < deck->size - 1; i++) {
+        deck->cards[i] = deck->cards[i + 1];
+    }
+
+    deck->size--;
+    return true;
+}
+
+/**
+ * @brief Checks if the deck is empty
+ */
+bool isEmpty(const CardDeck* deck)
+{
+    return deck && (deck->size == 0);
+}
+
+/**
+ * @brief Prints all cards in the deck
+ */
+void printDeck(const CardDeck* deck)
+{
+    if (!deck) {
+        printf("NULL deck\n");
+        return;
+    }
+
+    printf("Deck has %d cards:\n", deck->size);
+    for (int i = 0; i < deck->size; i++) {
+        printf("%d: ", i);
+        printCard(&deck->cards[i]);
+        printf("\n");
+    }
+}
