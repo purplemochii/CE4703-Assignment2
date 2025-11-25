@@ -124,6 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="card.h" />
+    <ClInclude Include="deck.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="card.c" />
