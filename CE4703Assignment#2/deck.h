@@ -16,6 +16,7 @@
 #define DECK_H
 
 #include "card.h"
+#include <stdbool.h>
 
 /**
 * @brief  Structure representing a deck of playing cards

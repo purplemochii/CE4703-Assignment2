@@ -26,5 +26,8 @@
     <ClCompile Include="card.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="deck.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
