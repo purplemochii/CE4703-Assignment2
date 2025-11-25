@@ -125,10 +125,12 @@
   <ItemGroup>
     <ClInclude Include="card.h" />
     <ClInclude Include="deck.h" />
+    <ClInclude Include="sort.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="card.c" />
     <ClCompile Include="deck.c" />
+    <ClCompile Include="sort.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
