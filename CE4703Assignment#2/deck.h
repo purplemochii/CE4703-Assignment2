@@ -1,12 +1,11 @@
 /**
  * @file deck.h
- * @brief //Card type: Suit enum, Rank enum, Card struct and basic operations.
+ * @brief CardDeck type and operations for managing a deck of playing cards
  *
- * This file defines the data type for a single playing card.
- * A card has a suit (Club, Spade, Heart, Diamond)
- * and a rank (Two through Ace). It also declares helper
- * functions to print and compare cards.
- * This type will be used in the card game program.
+ * This file defines the CardDeck data structure which can hold multiple
+ * packs of cards (52 cards per pack). The deck uses dynamic memory allocation
+ * to support any number of cards. It provides operations for shuffling,
+ * adding/removing cards, and more.
  *
  * @author Shrestha Dey
  * @date 25 November 2025
@@ -94,5 +93,22 @@ bool removeTopCard(CardDeck* deck, Card* out_card);
  * @return true if card was removed successfully, false if position is invalid
  */
 bool removeCardAt(CardDeck* deck, int position, Card* out_card);
+
+/**
+ * @brief Checks if the deck is empty
+ *
+ * @param deck Pointer to the deck, cannot be NULL
+ * @return true if deck has no cards, false otherwise
+ */
+bool isEmpty(const CardDeck* deck);
+
+/**
+ * @brief Prints all cards in the deck
+ *
+ * Displays each card on a separate line, useful for debugging.
+ *
+ * @param deck Pointer to the deck to print, cannot be NULL
+ */
+void printDeck(const CardDeck* deck);
 
 #endif
