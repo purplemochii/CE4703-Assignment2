@@ -3,7 +3,7 @@
  * @brief Implementation of CardDeck operations
  *
  * This file implements all the CardDeck functions declared in deck.h.
- * The deck uses a dynamic array that grows as needed when cards are added.
+ * The deck uses a singly linked list with head and tail pointers.
  *
  * @author Shrestha Dey
  * @date 25 November 2025
@@ -14,27 +14,26 @@
 #include <time.h>
 
 #define CARDS_PER_PACK 52
-#define INITIAL_CAPACITY 52
 
  /**
-  * @brief Helper function to grow the deck's capacity
-  *
-  * Doubles the current capacity and reallocates the cards array.
-  *
-  * @param deck Pointer to the deck to grow
-  * @return true on success, false on memory allocation failure
-  */
-static bool growDeck(CardDeck* deck)
+ * @brief Helper function to create a new node
+ *
+ * Allocates memory for a new node and initializes it with the given card.
+ *
+ * @param card The card to store in the node
+ * @return Pointer to the new node, or NULL on allocation failure
+ */
+static CardNode* createNode(Card card)
 {
-    int new_capacity = deck->capacity * 2;
-    Card* new_cards = realloc(deck->cards, new_capacity * sizeof(Card));
-    if (!new_cards) {
-        return false;
+    CardNode* node = malloc(sizeof(CardNode));
+    if (!node) {
+        return NULL;
     }
-    deck->cards = new_cards;
-    deck->capacity = new_capacity;
-    return true;
+    node->card = card;
+    node->next = NULL;
+    return node;
 }
+
 
 /**
  * @brief Initializes a new deck with the specified number of card packs
@@ -51,26 +50,20 @@ CardDeck* initDeck(int num_packs)
         return NULL;
     }
 
-    /// Calculate total cards needed
-    int total_cards = num_packs * CARDS_PER_PACK;
-    int capacity = (total_cards > 0) ? total_cards : INITIAL_CAPACITY;
-
-    /// Allocate the cards array
-    deck->cards = malloc(capacity * sizeof(Card));
-    if (!deck->cards) {
-        free(deck);
-        return NULL;
-    }
-
+    deck->head = NULL;
+    deck->tail = NULL;
     deck->size = 0;
-    deck->capacity = capacity;
 
     /// Fill the deck with complete packs
     for (int pack = 0; pack < num_packs; pack++) {
         for (Suit s = CLUB; s <= DIAMOND; s++) {
             for (Rank r = TWO; r <= ACE; r++) {
                 Card c = { s, r };
-                deck->cards[deck->size++] = c;
+                if (!addCardToEnd(deck, c)) {
+                    // Memory allocation failed, clean up
+                    freeDeck(deck);
+                    return NULL;
+                }
             }
         }
     }
@@ -83,10 +76,20 @@ CardDeck* initDeck(int num_packs)
  */
 void freeDeck(CardDeck* deck)
 {
-    if (deck) {
-        free(deck->cards);
-        free(deck);
+    if (!deck) {
+        return;
     }
+
+    /// Free all nodes in the linked list
+    CardNode* current = deck->head;
+    while (current) {
+        CardNode* next = current->next;
+        free(current);
+        current = next;
+    }
+
+    /// Free the deck structure itself
+    free(deck);
 }
 
 /**
@@ -98,17 +101,38 @@ void shuffleDeck(CardDeck* deck)
         return;
     }
 
+    /// Convert linked list to array for shuffling
+    Card* temp_array = malloc(deck->size * sizeof(Card));
+    if (!temp_array) {
+        return;
+    }
+
+    /// Copy cards to array
+    CardNode* current = deck->head;
+    for (int i = 0; i < deck->size; i++) {
+        temp_array[i] = current->card;
+        current = current->next;
+    }
+
+    /// Fisher-Yates shuffle
     for (int i = deck->size - 1; i > 0; i--) {
         int j = rand() % (i + 1);
-
-        /// Swap cards[i] and cards[j]
-        Card temp = deck->cards[i];
-        deck->cards[i] = deck->cards[j];
-        deck->cards[j] = temp;
+        Card temp = temp_array[i];
+        temp_array[i] = temp_array[j];
+        temp_array[j] = temp;
     }
+
+    /// Copy shuffled cards back to linked list
+    current = deck->head;
+    for (int i = 0; i < deck->size; i++) {
+        current->card = temp_array[i];
+        current = current->next;
+    }
+
+    free(temp_array);
 }
 /**
- *@brief Adds a card to the top of the deck
+ *@brief Adds a card to the beginning of the deck
  */
 bool addCard(CardDeck* deck, Card card)
 {
@@ -116,15 +140,21 @@ bool addCard(CardDeck* deck, Card card)
         return false;
     }
 
-    // Grow the deck if needed
-    if (deck->size >= deck->capacity) {
-        if (!growDeck(deck)) {
-            return false;
-        }
+    CardNode* new_node = createNode(card);
+    if (!new_node) {
+        return false;
     }
 
-    // Add card to the top (end of array)
-    deck->cards[deck->size++] = card;
+    /// Add to the beginning (head)
+    new_node->next = deck->head;
+    deck->head = new_node;
+
+    /// If deck was empty, this is also the tail
+    if (!deck->tail) {
+        deck->tail = new_node;
+    }
+
+    deck->size++;
     return true;
 }
 
@@ -133,12 +163,24 @@ bool addCard(CardDeck* deck, Card card)
  */
 bool removeTopCard(CardDeck* deck, Card* out_card)
 {
-    if (!deck || !out_card || deck->size == 0) {
+    if (!deck || !out_card || !deck->head) {
         return false;
     }
 
-    // Remove from the top (end of array)
-    *out_card = deck->cards[--deck->size];
+    // Store the card from the head node
+    *out_card = deck->head->card;
+
+    // Remove the head node
+    CardNode* old_head = deck->head;
+    deck->head = deck->head->next;
+
+    // If we just removed the last card, update tail
+    if (!deck->head) {
+        deck->tail = NULL;
+    }
+
+    free(old_head);
+    deck->size--;
     return true;
 }
 
@@ -151,14 +193,28 @@ bool removeCardAt(CardDeck* deck, int position, Card* out_card)
         return false;
     }
 
-    // Store the card to return
-    *out_card = deck->cards[position];
-
-    // Shift all cards after position down by one
-    for (int i = position; i < deck->size - 1; i++) {
-        deck->cards[i] = deck->cards[i + 1];
+    /// Special case: removing from position 0 (head)
+    if (position == 0) {
+        return removeTopCard(deck, out_card);
     }
 
+    /// Traverse to the node before the target position
+    CardNode* current = deck->head;
+    for (int i = 0; i < position - 1; i++) {
+        current = current->next;
+    }
+
+    /// Remove the node at position
+    CardNode* to_remove = current->next;
+    *out_card = to_remove->card;
+    current->next = to_remove->next;
+
+    /// If we removed the tail, update tail pointer
+    if (!current->next) {
+        deck->tail = current;
+    }
+
+    free(to_remove);
     deck->size--;
     return true;
 }
@@ -182,9 +238,12 @@ void printDeck(const CardDeck* deck)
     }
 
     printf("Deck has %d cards:\n", deck->size);
-    for (int i = 0; i < deck->size; i++) {
-        printf("%d: ", i);
-        printCard(&deck->cards[i]);
+    CardNode* current = deck->head;
+    int index = 0;
+    while (current) {
+        printf("%d: ", index++);
+        printCard(&current->card);
         printf("\n");
+        current = current->next;
     }
 }
