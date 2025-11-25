@@ -39,5 +39,60 @@ typedef struct {
  */
 CardDeck* initDeck(int num_packs);
 
+/**
+ * @brief Frees all memory associated with a deck
+ *
+ * Deallocates the cards array and the deck structure itself.
+ * After calling this, the deck pointer becomes invalid.
+ *
+ * @param deck Pointer to the deck to be freed, can be NULL
+ */
+void freeDeck(CardDeck* deck);
+
+/**
+ * @brief Shuffles the deck randomly
+ *
+ * Uses the Fisher-Yates shuffle algorithm to randomize the order
+ * of all cards in the deck.
+ *
+ * @param deck Pointer to the deck to shuffle, cannot be NULL
+ */
+void shuffleDeck(CardDeck* deck);
+
+/**
+ * @brief Adds a card to the top of the deck
+ *
+ * The deck will automatically grow if needed to accommodate the new card.
+ *
+ * @param deck Pointer to the deck, cannot be NULL
+ * @param card The card to add (copied into the deck)
+ * @return true if card was added successfully, false on memory allocation failure
+ */
+bool addCard(CardDeck* deck, Card card);
+
+/**
+ * @brief Removes and returns the top card from the deck
+ *
+ * The top card is the last card in the array (highest index).
+ * The deck size is reduced by one.
+ *
+ * @param deck Pointer to the deck, cannot be NULL
+ * @param out_card Pointer to store the removed card, cannot be NULL
+ * @return true if a card was removed successfully, false if deck was empty
+ */
+bool removeTopCard(CardDeck* deck, Card* out_card);
+
+/**
+ * @brief Removes a card at a specific position in the deck
+ *
+ * Position 0 is the bottom of the deck.
+ * Cards after the removed position are shifted down to fill the gap.
+ *
+ * @param deck Pointer to the deck, cannot be NULL
+ * @param position Index of the card to remove (0 to size-1).
+ * @param out_card Pointer to store the removed card, cannot be NULL
+ * @return true if card was removed successfully, false if position is invalid
+ */
+bool removeCardAt(CardDeck* deck, int position, Card* out_card);
 
 #endif
