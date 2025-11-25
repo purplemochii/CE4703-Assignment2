@@ -3,9 +3,9 @@
  * @brief CardDeck type and operations for managing a deck of playing cards
  *
  * This file defines the CardDeck data structure which can hold multiple
- * packs of cards (52 cards per pack). The deck uses dynamic memory allocation
- * to support any number of cards. It provides operations for shuffling,
- * adding/removing cards, and more.
+ * packs of cards (52 cards per pack). The deck linked lists with dynamic 
+ * memory allocation to support any number of cards. It provides operations 
+ * for shuffling, adding/removing cards, and more.
  *
  * @author Shrestha Dey
  * @date 25 November 2025
@@ -18,13 +18,21 @@
 #include "card.h"
 #include <stdbool.h>
 
+ /**
+  * @brief Node structure for the linked list
+  */
+typedef struct CardNode {
+    Card card;              ///< The card stored in this node
+    struct CardNode* next;  ///< Pointer to the next node, or NULL if this is the last node
+} CardNode;
+
 /**
 * @brief  Structure representing a deck of playing cards
 */
 typedef struct {
-    Card* cards;     ///< Dynamic array of cards
+    CardNode* head;  ///< Pointer to the first node in the list (top of deck)
+    CardNode* tail;  ///< Pointer to the last node in the list (bottom of deck)
     int size;        ///< Current number of cards in the deck
-    int capacity;   ///< Total allocated space for cards
 } CardDeck;
 
 /**
@@ -42,7 +50,7 @@ CardDeck* initDeck(int num_packs);
 /**
  * @brief Frees all memory associated with a deck
  *
- * Deallocates the cards array and the deck structure itself.
+ * Deallocates all nodes in the linked list and the deck structure itself.
  * After calling this, the deck pointer becomes invalid.
  *
  * @param deck Pointer to the deck to be freed, can be NULL
@@ -73,8 +81,8 @@ bool addCard(CardDeck* deck, Card card);
 /**
  * @brief Removes and returns the top card from the deck
  *
- * The top card is the last card in the array (highest index).
- * The deck size is reduced by one.
+ * The top card is the head of linked list (first card).
+ * The head pointer is updated to point to the next card.
  *
  * @param deck Pointer to the deck, cannot be NULL
  * @param out_card Pointer to store the removed card, cannot be NULL
@@ -85,8 +93,7 @@ bool removeTopCard(CardDeck* deck, Card* out_card);
 /**
  * @brief Removes a card at a specific position in the deck
  *
- * Position 0 is the bottom of the deck.
- * Cards after the removed position are shifted down to fill the gap.
+ * Position 0 is the top of the deck and (size-1) is bottom.
  *
  * @param deck Pointer to the deck, cannot be NULL
  * @param position Index of the card to remove (0 to size-1).
