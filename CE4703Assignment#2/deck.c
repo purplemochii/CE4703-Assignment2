@@ -101,6 +101,7 @@ void shuffleDeck(CardDeck* deck)
         return;
     }
 
+    srand((unsigned int)time(NULL));
     /// Convert linked list to array for shuffling
     Card* temp_array = malloc(deck->size * sizeof(Card));
     if (!temp_array) {
@@ -158,6 +159,34 @@ bool addCard(CardDeck* deck, Card card)
     return true;
 }
 
+/**
+ * @brief Adds a card to the bottom of the deck 
+*/
+bool addCardToEnd(CardDeck* deck, Card card)
+{
+    if (!deck) {
+        return false;
+    }
+
+    CardNode* new_node = createNode(card);
+    if (!new_node) {
+        return false;
+    }
+
+    if (!deck->tail) {
+        //empty deck
+        deck->head = new_node;
+        deck->tail = new_node;
+    }
+    else {
+        deck->tail->next = new_node;
+        deck->tail = new_node;
+    }
+
+    //incement decksize
+    deck->size++;
+    return true;
+}
 /**
  * @brief Removes and returns the top card from the deck
  */

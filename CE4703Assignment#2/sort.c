@@ -26,12 +26,16 @@ void cardSwap(Card* a, Card* b)
 /**
  * @brief Sorts deck of cards based on suit and rank
  */
+//sortdeck is treating the deck like an array but we're using linked lists, which need nodes, not indexing
 void sortDeck(CardDeck* deck)
 {
-    for (int i = 0; i < 52; i++) {
+    //replace array indexing with node pointers and nested loops to walk through the list
+    for (int i = 0; i < 52; i++) { // sorting must use deck -> size, hardcoding doesnt work in this instance since the players choose the deck size they want
         for (int j = i + 1; j < 52; j++) {
-            if (compareCards(deck[i], deck[j]) > 0)
-                cardSwap(deck[i], deck[j]);
+            if (compareCards(deck[i], deck[j]) > 0)//compareCards expects pointers, not values (hence the error)
+                cardSwap(deck[i], deck[j]);//we're swapping the actual card values inside the nodes, not the nodes themselves
         }
     }
+
+    //to make things easier, you can look up bubble sort / selection sort using linked-lists specifically
 }

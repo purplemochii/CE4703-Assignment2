@@ -27,13 +27,13 @@ We are building a card game in C for two players:
 
 ## 🧩 Group Roles
 
-| Role | Description |
-|------|-------------|
-| **1. Card Structure Developer** | Implement `Card` struct + `enum Suit` and `enum Rank`. Add print functions + Doxygen. |
-| **2. Deck Developer** | Implement dynamic `CardDeck`, linked list or malloc-based structure. Implement add/remove/shuffle/export functions. |
-| **3. Sorting Developer** | Implement chosen sorting algorithm (Merge Sort, Bubble Sort, or Insertion Sort). Integrate with CardDeck. |
-| **4. Game Logic Developer** | Implement the full game simulation and connect everything together. |
-| **5. QA + Documentation** | Test the project, integrate components, add Doxygen + final polish. |
+| Role | Description																															|
+|------|----------------------------------------------------------------------------------------------------------------------------------------|
+| **1. |Card Structure Developer** | Implement `Card` struct + `enum Suit` and `enum Rank`. Add print functions + Doxygen.						|
+| **2. |Deck Developer** | Implement dynamic `CardDeck`, linked list or malloc-based structure. Implement add/remove/shuffle/export functions.	|
+| **3. |Sorting Developer** | Implement chosen sorting algorithm (Merge Sort, Bubble Sort, or Insertion Sort). Integrate with CardDeck.			|
+| **4. |Game Logic Developer** | Implement the full game simulation and connect everything together.												|
+| **5. |QA + Documentation** | Test the project, integrate components, add Doxygen + final polish.												|
 
 ---
 

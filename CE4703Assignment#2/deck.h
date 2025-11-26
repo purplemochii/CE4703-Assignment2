@@ -79,6 +79,15 @@ void shuffleDeck(CardDeck* deck);
 bool addCard(CardDeck* deck, Card card);
 
 /**
+ * @brief Add card to the bottom of the deck
+ * 
+ * @param deck Pointer to the deck, must not be NULL
+ * @param card Card to add to the bottom
+ * @return true if card added successfully, false if memory failure
+*/
+bool addCardToEnd(CardDeck* deck, Card card);
+
+/**
  * @brief Removes and returns the top card from the deck
  *
  * The top card is the head of linked list (first card).
