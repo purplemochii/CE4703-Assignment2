@@ -18,7 +18,7 @@ typedef struct {
 typedef struct {
 	Player players[NUM_PLAYERS]; // players
 	CardDeck* hiddenDeck;	// draw pile (the ones that are face down)
-	CardDeck* palyedDeck;	// discarded pile (faced up)
+	CardDeck* playedDeck;	// discarded pile (faced up)
 	Card currentCard;	// current card that is being matched
 	int currentPlayer;	// player number (either 0 or 1 bc theres only 2 players)
 	int gameOver;	 // flag that signifies game over
