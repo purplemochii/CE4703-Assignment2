@@ -183,17 +183,60 @@ void reshuffleHiddenDeck(GameState* game)
 
 		//remove cards from the bottom so you dont reverse their order
 		removeCardAt(game -> playedDeck, game -> playedDeck -> size - 1, &card);
-		addCardToEnd(game->hiddenDeck, card);
+		addCardToEnd(game -> hiddenDeck, card);
 	}
 
-	shuffleDeck(game->hiddenDeck);
-	printf("Reshuffled! hidden deck now had %d cards! \n", game->hiddenDeck->size);
+	shuffleDeck(game -> hiddenDeck);
+	printf("Reshuffled! hidden deck now had %d cards! \n", game -> hiddenDeck -> size);
 }
 
 /* --- display fns ---*/
-void printPlayerHand(int playerIndex, const CardDeck* hand);
-void printGameState(const GameState* game);
+
+/* -- print players hand -- */
+void printPlayerHand(int playerIndex, const CardDeck* hand)
+{
+	printf("Player %d hand (%d cards): \n", playerIndex + 1, hand -> size);
+	CardNode* current = hand -> head;
+	int index = 0;
+	while (current != NULL) {
+		printf(" [%d] ", index++);
+		printCard(&current -> card);
+		current = current -> next;
+
+	}
+	printf("\n");
+}
+
+/* -- prints current game state -- */
+void printGameState(const GameState* game)
+{
+	printf("\n=== GAME STATE ===\n");
+	printf("Current card: ");
+	printCard(&game -> currentCard);
+	printf("\n");
+	printf("Current player: %s\n", game -> players[game -> currentPlayer].name);
+	printf("Hidden deck: %d cards\n", game -> hiddenDeck -> size);
+	printf("Played deck: %d cards\n", game->playedDeck->size);
+	printf("\n");
+
+}
 
 /* --- game flow ---*/
-void nextTurn(GameState* game);
-int checkGameOver(const GameState* game);
+
+/* -- goes to player's next turn -- */
+void nextTurn(GameState* game)
+{
+	game->currentPlayer = (game->currentPlayer + 1) % NUM_PLAYERS;
+}
+
+/* -- check if game is over -- */
+int checkGameOver(const GameState* game)
+{
+	for (int i = 0; i < NUM_PLAYERS; i++) {
+		if (game->players[i].hand->size == 0) {
+			printf("\n⭐⭐⭐ %s wins the game! ⭐⭐⭐\n", game->players[i].name);
+			return 1;
+		}
+	}
+	return 0;
+}
