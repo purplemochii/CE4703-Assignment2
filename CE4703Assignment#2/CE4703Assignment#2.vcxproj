@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClCompile Include="card.c" />
     <ClCompile Include="deck.c" />
+    <ClCompile Include="game.c" />
     <ClCompile Include="sort.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
