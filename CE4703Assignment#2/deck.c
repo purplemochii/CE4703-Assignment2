@@ -17,7 +17,7 @@
 
  /**
  * @brief Helper function to create a new node
- *
+ * 
  * Allocates memory for a new node and initializes it with the given card.
  *
  * @param card The card to store in the node
