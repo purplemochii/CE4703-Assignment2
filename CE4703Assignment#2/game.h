@@ -19,7 +19,7 @@ typedef struct {
 	Player players[NUM_PLAYERS]; // players
 	CardDeck* hiddenDeck;	// draw pile (the ones that are face down)
 	CardDeck* palyedDeck;	// discarded pile (faced up)
-	Card currentcard;	// current card that is being matched
+	Card currentCard;	// current card that is being matched
 	int currentPlayer;	// player number (either 0 or 1 bc theres only 2 players)
 	int gameOver;	 // flag that signifies game over
 } GameState;
@@ -31,6 +31,7 @@ void freeGame(GameState* game);
 /* --- game op ---*/
 void dealInitialCards(GameState* game);
 int findMatchingCard(const GameState* game, int playerIndex);
+int isValidMove(const Card* card, const Card* currentCard);
 int playCard(GameState* game, int playerIndex, int cardIndex);
 void drawCardForPlayer(GameState* game, int playerIndex);
 void reshuffleHiddenDeck(GameState* game);
