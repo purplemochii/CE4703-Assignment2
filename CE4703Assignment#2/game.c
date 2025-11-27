@@ -46,7 +46,7 @@ GameState* initGame(int numPacks)
 
 			return NULL;
 		}
-		printf(game -> players[i].name, "Player %d", i + 1);
+		snprintf(game -> players[i].name, sizeof(game -> players[i].name), "Player %d", i + 1);
 	}
 
 	game -> currentPlayer = 0;
@@ -170,7 +170,6 @@ void drawCardForPlayer(GameState* game, int playerIndex)
 void reshuffleHiddenDeck(GameState* game)
 {
 	printf("Hidden deck empty! Please hol up while it reshuffles. \n");
-	pritnf("what u still looking at..\n");
 
 	// keep the current card in played deck
 	if (game -> playedDeck -> size <= 1) {
@@ -226,15 +225,15 @@ void printGameState(const GameState* game)
 /* -- goes to player's next turn -- */
 void nextTurn(GameState* game)
 {
-	game->currentPlayer = (game->currentPlayer + 1) % NUM_PLAYERS;
+	game -> currentPlayer = (game -> currentPlayer + 1) % NUM_PLAYERS;
 }
 
 /* -- check if game is over -- */
 int checkGameOver(const GameState* game)
 {
 	for (int i = 0; i < NUM_PLAYERS; i++) {
-		if (game->players[i].hand->size == 0) {
-			printf("\n⭐⭐⭐ %s wins the game! ⭐⭐⭐\n", game->players[i].name);
+		if (game -> players[i].hand -> size == 0) {
+			printf("\n*** %s wins the game! ***\n", game -> players[i].name);
 			return 1;
 		}
 	}

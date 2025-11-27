@@ -21,7 +21,7 @@ void simulateGame(int numPacks)
 
 	// sort and shiw players hands
 	for (int i = 0; i < NUM_PLAYERS; i++) {
-		sortDeckByRank(game -> players[i].hand);
+		sortDeck(game -> players[i].hand);
 		printPlayerHand(i, game -> players[i].hand);
 	}
 

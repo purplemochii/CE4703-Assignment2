@@ -9,7 +9,7 @@ int main()
 	int numPacks;
 
 	printf("Enter number of card packs to use: ");
-	scanf("%d", &numPacks);
+	scanf_s("%d", &numPacks);
 
 	if (numPacks <= 0) {
 		printf("Invalid number of packs. Using 1 pack by default.\n");

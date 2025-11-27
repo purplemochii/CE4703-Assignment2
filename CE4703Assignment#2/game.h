@@ -9,13 +9,13 @@
 #define MAX_HAND_SIZE 20
 
 /* --- player --- */
-typedef struct {
+typedef struct Player{
 	CardDeck* hand; // player's hand
 	char name[20]; // player
 } Player;
 
 /* --- game state --- */
-typedef struct {
+typedef struct GameState{
 	Player players[NUM_PLAYERS]; // players
 	CardDeck* hiddenDeck;	// draw pile (the ones that are face down)
 	CardDeck* playedDeck;	// discarded pile (faced up)
