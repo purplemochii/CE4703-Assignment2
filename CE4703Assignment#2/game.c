@@ -1,4 +1,15 @@
-﻿#include <stdio.h>
+﻿/**
+ * @file game.c
+ * @brief Implementation of game logic
+ *
+ * This file implements the complete card game according to the specified rules.
+ * It handles card dealing, matching logic, player turns, and game flow.
+ *
+ * @author Oluwatunmise Adegbola
+ * @date 26 November 2025
+*/
+
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -46,7 +57,7 @@ GameState* initGame(int numPacks)
 
 			return NULL;
 		}
-		snprintf(game -> players[i].name, sizeof(game -> players[i].name), "Player %d", i + 1);
+		sprintf(game -> players[i].name, sizeof(game -> players[i].name), "Player %d", i + 1);
 	}
 
 	game -> currentPlayer = 0;
@@ -54,6 +65,13 @@ GameState* initGame(int numPacks)
 
 	return game;
 }
+
+
+/**
+ * @brief Frees all memory associated with the game
+ *
+ * @param game Game state to free
+*/
 
 /* --- free game memory ---*/
 void freeGame(GameState* game) 
@@ -72,6 +90,15 @@ void freeGame(GameState* game)
 }
 
 /* --- game op ---*/
+
+
+/**
+ * @brief Deals initial cards to all players
+ *
+ * Deals INITIAL_HAND_SIZE cards to each player alternately from the hidden deck.
+ *
+ * @param game Game state
+*/
 
 /* -- give initial cards to players -- */
 void dealInitialCards(GameState* game)
@@ -94,6 +121,15 @@ void dealInitialCards(GameState* game)
 	}
 }
 
+
+/**
+ * @brief Finds the first matching card in player's hand
+ *
+ * @param game Game state
+ * @param playerIndex Index of player to check
+ * @return Index of matching card, or -1 if no match found
+*/
+
 /* -- find the first matching card -- */
 int findMatchingCard(const GameState* game, int playerIndex)
 {
@@ -112,11 +148,32 @@ int findMatchingCard(const GameState* game, int playerIndex)
 	return -1;	// no matching card found 🥀
 }
 
+
+/**
+ * @brief Checks if a card can be played on the current card
+ *
+ * A card is valid if it matches the current card's suit OR rank.
+ *
+ * @param card Card to check
+ * @param currentCard Current top card
+ * @return 1 if valid move, 0 otherwise
+*/
+
 /* -- checks if a card can be played indeed -- */
 int isValidMove(const Card* card, const Card* currentCard)
 {
 	return (card -> suit == currentCard -> suit) || (card -> rank == currentCard -> rank);
 }
+
+
+/**
+ * @brief Plays a card from player's hand
+ *
+ * @param game Game state
+ * @param playerIndex Index of player playing the card
+ * @param cardIndex Index of card in player's hand to play
+ * @return 1 if card was played successfully, 0 otherwise
+*/
 
 /* -- play card from a player's hand -- */
 int playCard(GameState* game, int playerIndex, int cardIndex)
@@ -137,12 +194,22 @@ int playCard(GameState* game, int playerIndex, int cardIndex)
 	game -> currentCard = playedCard;
 	addCard(game -> playedDeck, playedCard);
 
-	printf(" % s played : ", player -> name);
+	printf(" %s played : ", player -> name);
 	printCard(&playedCard);
 	printf("\n");
 
 	return 1;
 }
+
+
+/**
+ * @brief Draws a card from hidden deck for player
+ *
+ * If hidden deck is empty, reshuffles played deck into hidden deck first.
+ *
+ * @param game Game state
+ * @param playerIndex Index of player drawing the card
+*/
 
 /* -- draw a card for a player -- */
 void drawCardForPlayer(GameState* game, int playerIndex)
@@ -166,6 +233,13 @@ void drawCardForPlayer(GameState* game, int playerIndex)
 	}
 }
 
+
+/**
+ * @brief Reshuffles played deck into hidden deck
+ *
+ * Keeps the last played card in the played deck, moves the rest to hidden deck.
+*/
+
 /* -- reshuffle played deck -- */
 void reshuffleHiddenDeck(GameState* game)
 {
@@ -186,10 +260,18 @@ void reshuffleHiddenDeck(GameState* game)
 	}
 
 	shuffleDeck(game -> hiddenDeck);
-	printf("Reshuffled! hidden deck now had %d cards! \n", game -> hiddenDeck -> size);
+	printf("Reshuffled! hidden deck now has %d cards! \n", game -> hiddenDeck -> size);
 }
 
 /* --- display fns ---*/
+
+
+/**
+ * @brief Prints a player's hand
+ *
+ * @param playerIndex Index of the player
+ * @param hand Pointer to player's hand deck
+*/
 
 /* -- print players hand -- */
 void printPlayerHand(int playerIndex, const CardDeck* hand)
@@ -205,6 +287,13 @@ void printPlayerHand(int playerIndex, const CardDeck* hand)
 	}
 	printf("\n");
 }
+
+
+/**
+ * @brief Prints current game state
+ *
+ * @param game Game state
+*/
 
 /* -- prints current game state -- */
 void printGameState(const GameState* game)
@@ -222,11 +311,30 @@ void printGameState(const GameState* game)
 
 /* --- game flow ---*/
 
+
+/**
+ * @brief Advances to next player's turn
+ *
+ * @param game Game state
+*/
+
 /* -- goes to player's next turn -- */
 void nextTurn(GameState* game)
 {
 	game -> currentPlayer = (game -> currentPlayer + 1) % NUM_PLAYERS;
 }
+
+
+/**
+ * @file deck.c
+ * @brief Implementation of CardDeck operations
+ *
+ * This file implements all the CardDeck functions declared in deck.h.
+ * The deck uses a singly linked list with head and tail pointers.
+ *
+ * @author Shrestha Dey
+ * @date 25 November 2025
+*/
 
 /* -- check if game is over -- */
 int checkGameOver(const GameState* game)

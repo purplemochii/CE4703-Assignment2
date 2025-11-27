@@ -1,9 +1,27 @@
+/**
+ * @file gameSimulation.c
+ * @brief Main game loop simulation
+ *
+ * Runs the complete game according to the specified rules.
+ *
+ * @author Oluwatunmise Adegbola
+ * @date 26 November 2025
+*/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
 #include "game.h"
 
+
+/**
+ * @brief Main game loop simulation
+ *
+ * Runs the complete game according to the specified rules.
+ *
+ * @param numPacks Number of card packs to use
+ */
 void simulateGame(int numPacks)
 {
 	printf("=== Game Start! ===\n");

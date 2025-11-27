@@ -1,3 +1,12 @@
+/**
+ * @file game.h
+ * @brief Game logic and state management
+ *
+ * This file defines the game state structure and functions for managing the card game. It handles player turns, card matching, drawing, and game flow according to the specified rules.
+ *
+ * @author Oluwatunmise Adegbola
+ * @date 26 November 2025
+ */
 #ifndef GAME_H
 #define GAME_H
 
@@ -8,12 +17,20 @@
 #define INITIAL_HAND_SIZE 8
 #define MAX_HAND_SIZE 20
 
+
+/**
+  * @brief Structure representing a player in the game
+*/
 /* --- player --- */
 typedef struct Player{
 	CardDeck* hand; // player's hand
 	char name[20]; // player
 } Player;
 
+
+/**
+ * @brief Structure representing the complete game state
+*/
 /* --- game state --- */
 typedef struct GameState{
 	Player players[NUM_PLAYERS]; // players
